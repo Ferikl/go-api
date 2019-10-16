@@ -4,6 +4,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/ferikl/go-api/internal/app/store"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 )
@@ -13,6 +14,7 @@ type APIServer struct {
 	config *Config
 	logger *logrus.Logger
 	router *mux.Router
+	store  *store.Store
 }
 
 // New initialize APIServer
