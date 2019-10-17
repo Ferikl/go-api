@@ -2,7 +2,7 @@ package store
 
 // Config ..
 type Config struct {
-	DatabaseURL string `toml: "database_url"`
+	DatabaseURL string `toml:"database_url"`
 }
 
 // NewConfig ...
