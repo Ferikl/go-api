@@ -1,32 +1,36 @@
-package store_test
+package sqlstore_test
 
 import (
 	"testing"
 
 	"github.com/ferikl/go-api/internal/app/model"
-	"github.com/ferikl/go-api/internal/app/store"
+	"github.com/ferikl/go-api/internal/app/store/sqlstore"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestUserRepository_Create(t *testing.T) {
-	s, teardown := store.TestStore(t, databaseURL)
+	db, teardown := sqlstore.TestDB(t, databaseURL)
 
 	tables := []string{"users"}
 
 	defer teardown(tables)
 
-	u, err := s.User().Create(model.TestUser(t))
+	s := sqlstore.New(db)
 
-	assert.NoError(t, err)
+	u := model.TestUser(t)
+
+	assert.NoError(t, s.User().Create(u))
 	assert.NotNil(t, u)
 }
 
 func TestUserRepository_FindByEmail(t *testing.T) {
-	s, teardown := store.TestStore(t, databaseURL)
+	db, teardown := sqlstore.TestDB(t, databaseURL)
 
 	tables := []string{"users"}
 
 	defer teardown(tables)
+
+	s := sqlstore.New(db)
 
 	email := "user@example.org"
 

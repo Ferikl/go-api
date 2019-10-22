@@ -1,4 +1,4 @@
-package store
+package sqlstore
 
 import (
 	"github.com/ferikl/go-api/internal/app/model"
@@ -10,33 +10,33 @@ type UserRepository struct {
 }
 
 // Create ..
-func (r *UserRepository) Create(u *model.User) (*model.User, error) {
+func (r *UserRepository) Create(u *model.User) error {
 	if err := u.Validate(); err != nil {
-		return nil, err
+		return err
 	}
 
 	if err := u.BeforeCreate(); err != nil {
-		return nil, err
+		return err
 	}
 
 	stmt, err := r.store.db.Prepare("INSERT INTO users (email, password) VALUES (?, ?)")
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	res, err := stmt.Exec(u.Email, u.EncryptedPassword)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	lastID, err := res.LastInsertId()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	u.ID = lastID
 
-	return u, nil
+	return nil
 }
 
 // FindByEmail ..
