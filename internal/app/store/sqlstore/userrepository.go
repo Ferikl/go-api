@@ -1,7 +1,10 @@
 package sqlstore
 
 import (
+	"database/sql"
+
 	"github.com/ferikl/go-api/internal/app/model"
+	"github.com/ferikl/go-api/internal/app/store"
 )
 
 // UserRepository ..
@@ -43,11 +46,14 @@ func (r *UserRepository) Create(u *model.User) error {
 func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
 	u := &model.User{}
 
-	sql := "SELECT id, email, password FROM users where email = ?"
+	q := "SELECT id, email, password FROM users where email = ?"
 
-	err := r.store.db.QueryRow(sql, email).Scan(&u.ID, &u.Email, &u.EncryptedPassword)
+	err := r.store.db.QueryRow(q, email).Scan(&u.ID, &u.Email, &u.EncryptedPassword)
 
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, store.ErrRecordNotFound
+		}
 		return nil, err
 	}
 

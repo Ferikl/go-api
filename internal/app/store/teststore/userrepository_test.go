@@ -1,10 +1,11 @@
-package teststore
+package teststore_test
 
 import (
 	"testing"
 
 	"github.com/ferikl/go-api/internal/app/model"
-	"github.com/ferikl/go-api/internal/app/teststore"
+	"github.com/ferikl/go-api/internal/app/store"
+	"github.com/ferikl/go-api/internal/app/store/teststore"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -24,7 +25,7 @@ func TestUserRepository_FindByEmail(t *testing.T) {
 
 	_, err := s.User().FindByEmail(email)
 
-	assert.Error(t, err)
+	assert.EqualError(t, err, store.ErrRecordNotFound.Error())
 
 	u := model.TestUser(t)
 	u.Email = email

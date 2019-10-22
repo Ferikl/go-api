@@ -1,8 +1,6 @@
 package teststore
 
 import (
-	"database/sql"
-
 	"github.com/ferikl/go-api/internal/app/model"
 	"github.com/ferikl/go-api/internal/app/store"
 )
@@ -13,7 +11,7 @@ type Store struct {
 }
 
 // New ...
-func New(db *sql.DB) *Store {
+func New() *Store {
 	return &Store{}
 }
 
